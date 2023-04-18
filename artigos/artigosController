@@ -1,0 +1,93 @@
+const express = require("express");
+const router = express.Router();
+const slugify = require("slugify");
+
+const moduloArtigo = require("./Artigo");
+const moduloCategoria = require("../categorias/Categoria");
+
+
+router.get("/artigos", (req,res) => {
+    res.send("Rota de Artigos");
+});
+         
+router.get("/admin/artigos/index", (req,res)=> {
+
+    moduloArtigo.findAll({order: [['id','DESC']]}).then(tbArtigos => {
+        res.render("admin/artigos/index",{tbArtigos:tbArtigos});
+    })
+
+  
+})
+           
+router.get("/admin/artigos/alterarArtigo/:id", (req, res) => {
+    var id = req.params.id;    
+
+    // moduloArtigo.findByPk(id).then(tbArtigo => {
+    //    if(tbArtigo != undefined) {
+    //         res.render("admin/artigos/alterarArtigo", {tbArtigo: tbArtigo});
+    //    }else{
+    //     res.redirect("/admin/artigos/index");
+    //    }
+    //  }).catch(erro => {
+    //     res.redirect("/")
+    // });
+    res.redirect("/");
+});
+
+router.post("/artigos/update", (req,res) => {
+    var id = req.body.id;
+    var titulo = req.body.titulo;
+    var corpo = req.corpo;
+ 
+    moduloArtigo.update({titulo: titulo, slug: slugify(titulo),corpo: corpo},{
+        where: {
+            id: id 
+        }
+    }).then(() => {
+     res.redirect("/admin/categorias/index");
+    })
+ });
+
+router.post("/artigos/deletar", (req,res)=> {
+    var id = req.body.id;
+    if(id != undefined){
+        if(!isNaN(id)) {   //for um numero
+          moduloArtigo.destroy({ where: { id: id}  })
+          .then(() =>{
+            res.redirect("/admin/artigos/index");
+          });     
+    }else{
+        res.redirect("/admin/artigos/index");
+    }
+    }else{
+        res.redirect("/admin/artigos/index");
+    }
+
+});
+
+router.get("/admin/artigos/new", (req,res) => {
+
+    moduloCategoria.findAll().then(tbCategorias => {
+        res.render("admin/artigos/new",{tbCategorias:tbCategorias})
+    })
+})
+
+router.post("/artigos/save", (req,res) => {
+    var titulo    = req.body.titulo;
+    var body      = req.body.body;
+    var categoria = req.body.categoria;
+    //var idCategoria = req.body.idCategoria;
+
+    console.log("Erro:"+categoria);
+
+    moduloArtigo.create({
+        titulo: titulo,
+        slug: slugify(titulo),
+        corpo: body,
+        categoriaId: categoria  //idCategoria
+    }).then(() => {
+        res.redirect("/admin/artigos/index");
+    });
+});
+
+module.exports = router;

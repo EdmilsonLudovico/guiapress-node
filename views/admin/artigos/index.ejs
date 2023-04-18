@@ -1,0 +1,65 @@
+
+<%-include('../../partials/header.ejs')%>
+<body>
+    <%-include('../../partials/navbar.ejs')%>
+    <div class="container">
+        <hr>
+        <div class="card">
+          <div class="card-header">
+             <h2 style="ali">
+                Cadastro de Artigos
+             </h2>
+          </div>
+      </div>
+      <br>                              
+      <a class="btn btn-success" href="/admin/artigos/new">Novo</a>
+      
+        <table class="table table-bordered">
+          <div class="card-header">
+          <thead>
+               <tr>
+                 <th>Id</th>
+                 <th>Titulo</th>
+                 <th>Slug</th>
+                 <th>Categorias</th>
+                 <th>Ações</th>
+               </tr>
+            </thead>
+          
+            <tbody>
+
+              <% tbArtigos.forEach(tbArtigos => { %>
+                <tr>
+                  <th> <%=tbArtigos.id %>     </th>
+                  <th> <%=tbArtigos.titulo %> </th>
+                  <th> <%=tbArtigos.slug %>   </th>
+                  <th> <%=tbArtigos.categoriaId %>   </th>
+                  <th>
+                    
+                    <a class="btn btn-warning" href="/admin/artigos/alterarArtigo/<%=tbArtigos.id %>">Editar</a>
+
+                    <form method="POST" action="/artigos/deletar" onsubmit="confirmarDelecao(event, this)" style="display:inline" >
+                       <input type="hidden" name="id" value="<%=tbArtigos.id %>">
+                       <input type="hidden" name="corpo" value="<%=tbArtigos.corpo %>">
+                          <button class="btn btn-danger">Deletar</button>
+                    </form>
+                  </th>
+               </tr>
+
+              <% }) %>
+            </tbody>
+
+        </table>
+      
+    </div>
+</body>
+<%-include('../../partials/footer.ejs')%>
+<script>
+   function confirmarDelecao(event,form) {
+     event.preventDefault();
+     var decisao = confirm("Você deseja deletar este Artigo?");
+     if(decisao){
+      form.submit();
+     }
+   }
+</script>

@@ -1,0 +1,50 @@
+
+<%-include('../../partials/header.ejs')%>
+<body>
+    <%-include('../../partials/navbar.ejs')%>
+
+    <div class="container">
+        <hr>
+        <div class="card">
+            <div class="card-header">
+                <h2>Edição de Artigos</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/artigos/update">  
+
+                    <label>Titulo do Artigo</label> 
+                    <input class="form-control" type="text" name="titulo" 
+                    value="<% tbArtigo.titulo%>" placeholder="define o titulo do Artigo">
+                    <br>
+                    <label>Categoria</label> 
+                    <select name="categoria" class="form-control">
+                        
+                        <% tbCategorias.forEach((tbCat) => { %>
+                            <option value="<%= tbCat.id %>" >
+                                <%= tbCat.titulo %>
+                            </option>
+                        <% }) %>
+
+                    </select>
+                    <br>
+                    <textarea class="form-control" placeholder="Escreva o Artigo aqui!" 
+                    name="body" id="artigo" 
+                    aria-valuetext="<%= tbArtigo.corpo%>"></textarea><br>
+
+                    <button class="btn btn-success">Atualizar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+<%-include('../../partials/footer.ejs')%>
+<script src="/tinymce/tinymce.min.js"></script>
+<script>
+    tinymce.init({
+        selector: "#artigo",
+        language: 'pt_BR',
+        plugins: [
+            'advlist autolink link image lists preview hr searchreplace wordcount pagebreak fullscreen insertdatetime media save table paste emoticons'
+        ]
+    })
+</script>
