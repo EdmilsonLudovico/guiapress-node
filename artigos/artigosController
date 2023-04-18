@@ -76,9 +76,6 @@ router.post("/artigos/save", (req,res) => {
     var titulo    = req.body.titulo;
     var body      = req.body.body;
     var categoria = req.body.categoria;
-    //var idCategoria = req.body.idCategoria;
-
-    console.log("Erro:"+categoria);
 
     moduloArtigo.create({
         titulo: titulo,
@@ -86,6 +83,7 @@ router.post("/artigos/save", (req,res) => {
         corpo: body,
         categoriaId: categoria  //idCategoria
     }).then(() => {
+        console.log("sucesso!")
         res.redirect("/admin/artigos/index");
     });
 });

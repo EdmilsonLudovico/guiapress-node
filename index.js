@@ -36,7 +36,7 @@ app.get("/", (req,res) => {
 });
 
 app.listen(8080, () => {
-    console.log("Servidor esta rodando!");
+    console.log("Servidor esta rodando na porta 8080!");
 });
 
 
